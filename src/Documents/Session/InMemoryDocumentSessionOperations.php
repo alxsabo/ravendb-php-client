@@ -871,20 +871,25 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     /**
      * Marks the specified entity for deletion. The entity will be deleted when IDocumentSession.saveChanges is called.
      *
+     * Usage
+     *  - delete(?object $entity): void;
+     *  - delete(?string $id): void;
+     *  - delete(?string $id, ?string $expectedChangeVector): void;
+     *
      * @param string|object|null $entity
-     * @param string|null $changeVector
+     * @param string|null $expectedChangeVector
      *
      * @throws IllegalArgumentException
      * @throws IllegalStateException
      */
-    public function delete(string|object|null $entity, ?string $changeVector = null): void
+    public function delete(string|object|null $entity, ?string $expectedChangeVector = null): void
     {
         if (is_object($entity)) {
             $this->deleteEntity($entity);
             return;
         }
 
-        $this->deleteById($entity, $changeVector);
+        $this->deleteById($entity, $expectedChangeVector);
     }
 
     /**
@@ -966,9 +971,14 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     }
 
     /**
-     * @throws IllegalStateException
-     * @throws InvalidArgumentException
-     * @throws NonUniqueObjectException
+     * Store entities inside the session object.
+     *
+     * Usage:
+     *  - public function store(?object $entity): void;
+     *  - public function store(?object $entity, ?string $id): void;
+     *  - public function store(?object $entity, ?string $id, ?string $changeVector): void;
+     *
+     * @throws IllegalStateException|InvalidArgumentException|NonUniqueObjectException|ExceptionInterface
      */
     public function store(?object $entity, ?string $id = null, ?string $changeVector = null): void
     {

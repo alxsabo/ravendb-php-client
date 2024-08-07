@@ -145,7 +145,17 @@ class DocumentStore extends DocumentStoreBase
     /**
      * Opens the session for a particular database
      *
-     * @param null|string|SessionOptions $dbNameOrOptions Database to use
+     * Usage
+     *
+     * Open session for a 'default' database configured in 'DocumentStore'
+     *  - openSession(): DocumentSessionInterface;
+     *
+     * Open session for a specified database
+     *  - openSession(string $database): DocumentSessionInterface;
+     *
+     *  - openSession(SessionOptions $sessionOptions): DocumentSessionInterface;
+     *
+     * @param null|string|SessionOptions $dbNameOrOptions Database name or options to use
      *
      * @return DocumentSessionInterface Document session
      */
