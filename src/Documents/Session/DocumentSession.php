@@ -1107,7 +1107,7 @@ class DocumentSession extends InMemoryDocumentSessionOperations implements
      *
      * @return DocumentQueryInterface
      */
-    public function query(?string $className, $collectionOrIndexName = null): DocumentQueryInterface
+    public function query(?string $className, Query|null|string $collectionOrIndexName = null): DocumentQueryInterface
     {
         if (empty($collectionOrIndexName)) {
             return $this->_documentQuery($className, null, null, false);

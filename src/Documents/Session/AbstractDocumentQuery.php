@@ -422,7 +422,7 @@ abstract class AbstractDocumentQuery implements AbstractDocumentQueryInterface
 //    //TBD 4.1 public void _customSortUsing(String typeName, boolean descending)
 
 
-    protected function _projection(ProjectionBehavior $projectionBehavior): void
+    public function _projection(ProjectionBehavior $projectionBehavior): void
     {
         $this->projectionBehavior = $projectionBehavior;
     }

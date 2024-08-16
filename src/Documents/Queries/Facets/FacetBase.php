@@ -48,8 +48,11 @@ abstract class FacetBase
         return $this->aggregations;
     }
 
-    public function setAggregations(?AggregationArray $aggregations): void
+    public function setAggregations(null|array|AggregationArray $aggregations): void
     {
+        if (is_array($aggregations)) {
+            $aggregations = AggregationArray::fromArray($aggregations);
+        }
         $this->aggregations = $aggregations;
     }
 

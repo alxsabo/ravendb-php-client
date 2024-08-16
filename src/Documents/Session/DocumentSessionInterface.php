@@ -96,7 +96,7 @@ interface DocumentSessionInterface
      *
      * @return DocumentQueryInterface
      */
-    public function query(string $className, $collectionOrIndexName = null): DocumentQueryInterface;
+    public function query(string $className, Query|null|string $collectionOrIndexName = null): DocumentQueryInterface;
 
     /**
      * @param string $className

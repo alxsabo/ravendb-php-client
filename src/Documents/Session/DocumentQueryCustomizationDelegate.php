@@ -2,6 +2,12 @@
 
 namespace RavenDB\Documents\Session;
 
+use Closure;
+use RavenDB\Documents\Queries\ProjectionBehavior;
+use RavenDB\Documents\Queries\Timings\QueryTimings;
+use RavenDB\Documents\Session\Operations\QueryOperation;
+use RavenDB\Type\Duration;
+
 class DocumentQueryCustomizationDelegate implements DocumentQueryCustomizationInterface
 {
     private AbstractDocumentQuery $query;
@@ -16,92 +22,81 @@ class DocumentQueryCustomizationDelegate implements DocumentQueryCustomizationIn
         return $this->query;
     }
 
-//    @Override
-//    public QueryOperation getQueryOperation() {
-//        return query.getQueryOperation();
-//    }
-//
-//    public IDocumentQueryCustomization addBeforeQueryExecutedListener(Consumer<IndexQuery> action) {
-//        query._addBeforeQueryExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization removeBeforeQueryExecutedListener(Consumer<IndexQuery> action) {
-//        query._removeBeforeQueryExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization addAfterQueryExecutedListener(Consumer<QueryResult> action) {
-//        query._addAfterQueryExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization removeAfterQueryExecutedListener(Consumer<QueryResult> action) {
-//        query._removeAfterQueryExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization addAfterStreamExecutedCallback(Consumer<ObjectNode> action) {
-//        query._addAfterStreamExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization removeAfterStreamExecutedCallback(Consumer<ObjectNode> action) {
-//        query._removeAfterStreamExecutedListener(action);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization noCaching() {
-//        query._noCaching();
-//        return this;
-//    }
-//
-
-    public function noTracking(): DocumentQueryCustomizationInterface
+    public function getQueryOperation(): QueryOperation
     {
-        $this->query->noTracking();
+        return $this->query->getQueryOperation();
+    }
+
+    public function addBeforeQueryExecutedListener(Closure $action): DocumentQueryCustomizationInterface
+    {
+        $this->query->_addBeforeQueryExecutedListener($action);
         return $this;
     }
 
-//    @Override
-//    public IDocumentQueryCustomization timings(Reference<QueryTimings> timings) {
-//        query._includeTimings(timings);
-//        return this;
+    public function removeBeforeQueryExecutedListener(Closure $action): DocumentQueryCustomizationInterface
+    {
+        $this->query->_removeBeforeQueryExecutedListener($action);
+        return $this;
+    }
+
+
+    public function addAfterQueryExecutedListener(Closure $action): DocumentQueryCustomizationInterface
+    {
+        $this->query->_addAfterQueryExecutedListener($action);
+        return $this;
+    }
+
+    public function removeAfterQueryExecutedListener(Closure $action): DocumentQueryCustomizationInterface
+    {
+        $this->query->_removeAfterQueryExecutedListener($action);
+        return $this;
+    }
+
+//    public function addAfterStreamExecutedCallback(Closure $action): DocumentQueryCustomizationInterface
+//    {
+//        $this->query->_addAfterStreamExecutedListener($action);
+//        return $this;
 //    }
-//
-//    @Override
-//    public IDocumentQueryCustomization randomOrdering() {
-//        query._randomOrdering();
-//        return this;
+
+//    public function removeAfterStreamExecutedCallback(Closure $action): DocumentQueryCustomizationInterface
+//    {
+//        $this->query->_removeAfterStreamExecutedListener($action);
+//        return $this;
 //    }
-//
-//    @Override
-//    public IDocumentQueryCustomization randomOrdering(String seed) {
-//        query._randomOrdering(seed);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization waitForNonStaleResults() {
-//        query._waitForNonStaleResults(null);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization waitForNonStaleResults(Duration waitTimeout) {
-//        query._waitForNonStaleResults(waitTimeout);
-//        return this;
-//    }
-//
-//    @Override
-//    public IDocumentQueryCustomization projection(ProjectionBehavior projectionBehavior) {
-//        query._projection(projectionBehavior);
-//        return this;
-//    }
+
+    public function noCaching(): DocumentQueryCustomizationInterface
+    {
+        $this->query->_noCaching();
+        return $this;
+    }
+
+    public function noTracking(): DocumentQueryCustomizationInterface
+    {
+        $this->query->_noTracking();
+        return $this;
+    }
+
+    public function timings(QueryTimings &$timingsReference): DocumentQueryCustomizationInterface
+    {
+        $this->query->_includeTimings($timingsReference);
+        return $this;
+    }
+
+    public function randomOrdering(?string $seed = null): DocumentQueryCustomizationInterface
+    {
+        $this->query->_randomOrdering($seed);
+        return $this;
+    }
+
+    public function waitForNonStaleResults(?Duration $waitTimeout = null): DocumentQueryCustomizationInterface
+    {
+        $this->query->_waitForNonStaleResults($waitTimeout);
+        return $this;
+    }
+
+    public function projection(ProjectionBehavior $projectionBehavior): DocumentQueryCustomizationInterface
+    {
+        $this->query->_projection($projectionBehavior);
+        return $this;
+    }
 }
