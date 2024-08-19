@@ -151,6 +151,13 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
 
     /**
      * Sorts the query results by distance.
+     *
+     * Usage
+     *   - orderByDistance(DynamicSpatialField $field, float $latitude, float $longitude);
+     *   - orderByDistance(DynamicSpatialField $field, ?string $shapeWkt);
+     *   - orderByDistance(?string $fieldName, float $latitude, float $longitude, float $roundFactor = 0);
+     *   - orderByDistance(?string $fieldName, ?string $shapeWkt);
+     *
      * @param DynamicSpatialField|string $field
      * @param float|string $latitudeOrShapeWkt
      * @param float|null $longitude
@@ -169,6 +176,13 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
 
     /**
      * Sorts the query results by distance.
+     *
+     * Usage
+     *   - orderByDistanceDescending(?DynamicSpatialField $field, float $latitude, float $longitude);
+     *   - orderByDistanceDescending(?DynamicSpatialField $field, ?string $shapeWkt);
+     *   - orderByDistanceDescending(?string $fieldName, float $latitude, float $longitude, float $roundFactor = 0);
+     *   - orderByDistanceDescending(?string $fieldName, ?string $shapeWkt);
+     *
      * @param DynamicSpatialField|string $field
      * @param float|string $latitudeOrShapeWkt
      * @param float|null $longitude

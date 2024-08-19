@@ -8,6 +8,7 @@ use RavenDB\Documents\Indexes\Spatial\SpatialRelation;
 use RavenDB\Documents\Indexes\Spatial\SpatialUnits;
 use RavenDB\Documents\Queries\SearchOperator;
 use RavenDB\Documents\Queries\Spatial\DynamicSpatialField;
+use RavenDB\Documents\Queries\Spatial\SpatialCriteriaFactory;
 use RavenDB\Type\Collection;
 
 interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
@@ -291,6 +292,11 @@ interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
 
     /**
      * Ability to use one factory to determine spatial shape that will be used in query.
+     *
+     * Usage:
+     *   - spatial(string $fieldName, function(SpatialCriteriaFactory $x) {...})
+     *   - spatial(DynamicSpatialField $field, function(SpatialCriteriaFactory $x) {...})
+     *
      * @param string|DynamicSpatialField $field Spatial field
      * @param Closure $clause Spatial criteria factory
      * @return DocumentQueryInterface Query instance
