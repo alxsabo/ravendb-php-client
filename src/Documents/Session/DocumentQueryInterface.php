@@ -80,6 +80,15 @@ interface DocumentQueryInterface
      */
     public function groupBy($fieldName, ...$fieldNames): GroupByDocumentQueryInterface;
 
+
+    /**
+     * Usage:
+     *   - moreLikeThis(MoreLikeThisBase $moreLikeThis);
+     *   - moreLikeThis(function(MoreLikeThisBuilder $builder) {...});
+     *
+     * @param MoreLikeThisBase|Closure|null $moreLikeThisOrBuilder
+     * @return DocumentQueryInterface
+     */
     public function moreLikeThis(null|MoreLikeThisBase|Closure $moreLikeThisOrBuilder): DocumentQueryInterface;
 
     /**
