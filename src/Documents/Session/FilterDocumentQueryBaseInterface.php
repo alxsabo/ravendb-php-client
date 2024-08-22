@@ -84,13 +84,20 @@ interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
      *
      * Space separated terms e.g. 'John Adam' means that we will look in selected field for 'John'
      * or 'Adam'.
+     *
+     * Usage:
+     *   - search("Name", "Oren Dejan Alex");
+     *   - search("Name", "Oren Dejan Alex", $searchOperator);
+     *   - search("Name", ["Oren", "Dejan", "Alex"]);
+     *   - search("Name", ["Oren", "Dejan", "Alex"], $searchOperator);
+     *
      * @param string $fieldName Field name
-     * @param string $searchTerms Search terms
+     * @param string|array $searchTerms Search terms
      * @param ?SearchOperator $operator Search operator
      *
      * @return FilterDocumentQueryBaseInterface
      */
-    public function search(string $fieldName, string $searchTerms, ?SearchOperator $operator = null): QueryBaseInterface;
+    public function search(string $fieldName, string|array $searchTerms, ?SearchOperator $operator = null): QueryBaseInterface;
 
     //TBD expr TSelf Search<TValue>(Expression<Func<T, TValue>> propertySelector, string searchTerms, SearchOperator @operator = SearchOperator.Or);
 

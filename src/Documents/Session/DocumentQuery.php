@@ -259,8 +259,12 @@ class DocumentQuery extends AbstractDocumentQuery
         return $this;
     }
 
-    public function search(string $fieldName, string $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface
+    public function search(string $fieldName, string|array $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface
     {
+        if (is_array($searchTerms)) {
+            $searchTerms = implode(" ", $searchTerms);
+        }
+
         $this->_search($fieldName, $searchTerms, $operator);
         return $this;
     }

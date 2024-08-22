@@ -141,7 +141,28 @@ interface DocumentQueryInterface
     function negateNext(): DocumentQueryInterface;
     function openSubclause(): DocumentQueryInterface;
     public function orElse(): DocumentQueryInterface;
-    public function search(string $fieldName, string $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface;
+
+    /**
+     * Perform a search for documents which fields that match the searchTerms.
+     * If there is more than a single term, each of them will be checked independently.
+     *
+     * Space separated terms e.g. 'John Adam' means that we will look in selected field for 'John'
+     * or 'Adam'.
+     *
+     * Usage:
+     *   - search("Name", "Oren Dejan Alex");
+     *   - search("Name", "Oren Dejan Alex", $searchOperator);
+     *   - search("Name", ["Oren", "Dejan", "Alex"]);
+     *   - search("Name", ["Oren", "Dejan", "Alex"], $searchOperator);
+     *
+     * @param string $fieldName Field name
+     * @param string|array $searchTerms Search terms
+     * @param ?SearchOperator $operator Search operator
+     *
+     * @return FilterDocumentQueryBaseInterface
+     */
+    public function search(string $fieldName, string|array $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface;
+
     function whereLucene(string $fieldName, string $whereClause, bool $exact = false): DocumentQueryInterface;
     function whereBetween(string $fieldName, $start, $end, bool $exact = false): DocumentQueryInterface;
     function whereEndsWith(string $fieldName, $value, bool $exact = false): DocumentQueryInterface;
