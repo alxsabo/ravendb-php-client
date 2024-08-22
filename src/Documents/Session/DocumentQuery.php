@@ -171,11 +171,11 @@ class DocumentQuery extends AbstractDocumentQuery
         return $this;
     }
 
-//    @Override
-//    public IDocumentQuery<T> orderByScoreDescending() {
-//        _orderByScoreDescending();
-//        return this;
-//    }
+    public function orderByScoreDescending(): DocumentQueryInterface
+    {
+        $this->_orderByScoreDescending();
+        return $this;
+    }
 
     public function includeExplanations(?ExplanationOptions $options, Explanations &$explanations): DocumentQueryInterface
     {
