@@ -1652,15 +1652,17 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
         return $changes;
     }
 
-//    /**
-//     * Mark the entity as one that should be ignore for change tracking purposes,
-//     * it still takes part in the session, but is ignored for SaveChanges.
-//     *
-//     * @param entity entity
-//     */
-//    public void ignoreChangesFor(Object entity) {
-//        getDocumentInfo(entity).setIgnoreChanges(true);
-//    }
+    /**
+     * Mark the entity as one that should be ignored for change tracking purposes,
+     * it still takes part in the session, but is ignored for SaveChanges.
+     *
+     * @param object $entity Entity for which changed should be ignored
+     * @throws NonUniqueObjectException
+     */
+    public function ignoreChangesFor(object $entity): void
+    {
+        $this->getDocumentInfo($entity)->setIgnoreChanges(true);
+    }
 
     /**
      * Evicts the specified entity from the session.
