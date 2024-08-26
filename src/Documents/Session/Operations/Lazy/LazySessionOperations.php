@@ -64,7 +64,8 @@ class LazySessionOperations implements LazySessionOperationsInterface
         return $this->delegate->addLazyOperation(null, $operation, null);
     }
 
-    // public <TResult> Lazy <ConditionalLoadResult <TResult>> conditionalLoad(Class <TResult> clazz, String id, String changeVector) {
+    public function conditionalLoad(?string $className, ?string $id, ?string $changeVector): Lazy // Lazy <ConditionalLoadResult <TResult>>
+    {
         // if (StringUtils.isEmpty(id)) {
         //      throw new IllegalArgumentException("Id cannot be null");
         // }
@@ -89,8 +90,8 @@ class LazySessionOperations implements LazySessionOperationsInterface
                                             // return delegate.addLazyOperation((Class
 //                                            <ConditionalLoadResult
 //                                            <TResult>>)(Class< ? >)ConditionalLoadResult.class, lazyLoadOperation, null);
-//    }
-//
-//    //TBD expr ILazyLoaderWithInclude<T> ILazySessionOperations.Include<T>(Expression<Func<T, string>> path)
-//    //TBD expr ILazyLoaderWithInclude<T> ILazySessionOperations.Include<T>(Expression<Func<T, IEnumerable<string>>> path)
+    }
+
+    //TBD expr ILazyLoaderWithInclude<T> ILazySessionOperations.Include<T>(Expression<Func<T, string>> path)
+    //TBD expr ILazyLoaderWithInclude<T> ILazySessionOperations.Include<T>(Expression<Func<T, IEnumerable<string>>> path)
 }
