@@ -1713,9 +1713,17 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     /**
      * Defer commands to be executed on saveChanges()
      *
-     * defer(CommandDataInterface $command): void
-     * defer(CommandDataInterface $command, array $commands): void
-     * defer(array $commands): void
+     * Usage:
+     *   - defer(CommandDataInterface $command): void
+     *   - defer(CommandDataInterface $command, array $commands): void
+     *   - defer(array $commands): void
+     *   - defer(CommandDataInterface ...$commands): void
+     *
+     * Example:
+     *   - defer($cmd);
+     *   - defer($cmd1, $cmd2, $cmd3, $cmd4 ...)
+     *   - defer([$cmd1, $cmd2, $cmd4, $cmd4, ...])
+     *   - defer($cmd1, [$cmd2, $cmd3])
      *
      * @param CommandDataInterface|array $commands More commands to defer
      */
@@ -1725,26 +1733,18 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
             throw new InvalidArgumentException('You must call defer with command in parameter.');
         }
 
-        if (is_array($commands[0])) {
-            $this->deferCommands($commands[0]);
-            return;
-        }
-
-        if ($commands[0] instanceof CommandDataInterface) {
-            $this->deferCommand($commands[0]);
-            if (count($commands) == 1) {
-                return;
+        foreach ($commands as $command) {
+            if (is_array($command)) {
+                $this->deferCommands($command);
+                continue;
             }
-        }
-
-        if (count($commands) > 1) {
-            if (is_array($commands[1])) {
-                $this->deferCommands($commands[1]);
-                return;
+            if ($command instanceof CommandDataInterface) {
+                $this->deferCommand($command);
+                continue;
             }
-        }
 
-        throw new InvalidArgumentException('You called defer with invalid parameters');
+            throw new InvalidArgumentException('You called defer with invalid parameters');
+        }
     }
 
     /**

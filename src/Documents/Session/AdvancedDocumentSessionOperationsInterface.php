@@ -116,9 +116,17 @@ interface AdvancedDocumentSessionOperationsInterface
     /**
      * Defer commands to be executed on saveChanges()
      *
-     * defer(CommandDataInterface $command): void
-     * defer(CommandDataInterface $command, array $commands): void
-     * defer(array $commands): void
+     * Usage:
+     *   - defer(CommandDataInterface $command): void
+     *   - defer(CommandDataInterface $command, array $commands): void
+     *   - defer(array $commands): void
+     *   - defer(CommandDataInterface ...$commands): void
+     *
+     * Example:
+     *   - defer($cmd);
+     *   - defer($cmd1, $cmd2, $cmd3, $cmd4 ...)
+     *   - defer([$cmd1, $cmd2, $cmd4, $cmd4, ...])
+     *   - defer($cmd1, [$cmd2, $cmd3])
      *
      * @param CommandDataInterface|array $commands More commands to defer
      */
