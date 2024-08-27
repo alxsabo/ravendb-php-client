@@ -11,7 +11,7 @@ class ServerNode
     private ?Url $url = null;
     private ?string $database = null;
     private string $clusterTag;
-    private ServerNodeRole $serverRole;
+    private ?ServerNodeRole $serverRole = null;
 
     public function __construct()
     {
@@ -23,10 +23,7 @@ class ServerNode
         return $this->url;
     }
 
-    /**
-     * @param Url|string|null $url
-     */
-    public function setUrl($url): void
+    public function setUrl(Url|string|null $url): void
     {
         $this->url = is_string($url) ? new Url($url) : $url;
     }
