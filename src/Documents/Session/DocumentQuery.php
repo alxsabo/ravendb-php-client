@@ -570,12 +570,19 @@ class DocumentQuery extends AbstractDocumentQuery
      * The fields are the names of the fields to sort, defaulting to sorting by ascending.
      * You can prefix a field name with '-' to indicate sorting by descending or '+' to sort by ascending
      *
+     * Usage:
+     *   - orderBy("lastName"); // same as call: orderBy("lastName", OrderingType::string())
+     *   - orderBy("lastName", OrderingType::string());
+     *
+     *   - orderBy("units_in_stock", "MySorter");
+     *     // Results will be sorted by the 'units_in_stock' value according to the logic from 'MySorter' class
+     *
      * @param string $field
      * @param OrderingType|string|null $sorterNameOrOrdering
      *
      * @return DocumentQueryInterface
      */
-    function orderBy(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface
+    function orderBy(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface
     {
         $this->_orderBy($field, $sorterNameOrOrdering);
         return $this;
@@ -587,10 +594,18 @@ class DocumentQuery extends AbstractDocumentQuery
     /**
      * Order the results by the specified fields
      * The field is the name of the field to sort, defaulting to sorting by descending.
+     *
+     * Usage:
+     *   - orderByDescending("lastName"); // same as call: orderBy("lastName", OrderingType::string())
+     *   - orderByDescending("lastName", OrderingType::string());
+     *
+     *   - orderByDescending("units_in_stock", "MySorter");
+     *     // Results will be sorted by the 'units_in_stock' value according to the logic from 'MySorter' class
+     *
      * @param string $field Field to use in order by
      * @param string|OrderingType|null $sorterNameOrOrdering Sorter to use
      */
-    function orderByDescending(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface
+    function orderByDescending(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface
     {
         $this->_orderByDescending($field, $sorterNameOrOrdering ?? OrderingType::string());
         return $this;
