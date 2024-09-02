@@ -6,10 +6,13 @@ use Closure;
 use RavenDB\Documents\Conventions\DocumentConventions;
 use RavenDB\Exceptions\ExceptionDispatcher;
 use RavenDB\Exceptions\ExceptionSchema;
+use RavenDB\Exceptions\TimeoutException;
 use RavenDB\Extensions\JsonExtensions;
 use RavenDB\Http\RavenCommand;
 use RavenDB\Http\RequestExecutor;
 use RavenDB\Primitives\OperationCancelledException;
+use RavenDB\Type\Duration;
+use RavenDB\Utils\Stopwatch;
 
 class Operation
 {
@@ -59,8 +62,26 @@ class Operation
         $this->nodeTag = $nodeTag;
     }
 
-    public function waitForCompletion(): void
+    /**
+     * Wait for operation completion.
+     *
+     * It throws TimoutException if $duration is set and operation execution time elapses duration interval.
+     *
+     * Usage:
+     *   - waitForCompletion(): void;               // It will wait until operation is finished
+     *   - waitForCompletion(Duration $duration);   // It will wait for given duration
+     *   - waitForCompletion(int $seconds);         // It will wait for given seconds
+     *
+     * @param Duration|int|null $duration
+     */
+    public function waitForCompletion(Duration|int|null $duration = null): void
     {
+        $stopwatch = Stopwatch::createStarted();
+
+        if (is_int($duration)) {
+            $duration = Duration::ofSeconds($duration);
+        }
+
         while (true) {
             $status = $this->fetchOperationsStatus();
 
@@ -85,6 +106,13 @@ class Operation
 
                     $exception = ExceptionDispatcher::get($schema, $exceptionResult->getStatusCode());
                     throw new $exception;
+            }
+
+            echo 'checked time here';
+            if ($duration) {
+                if ($stopwatch->elapsedInMillis() > $duration->toMillis()) {
+                    throw new TimeoutException("Wait for completion time expired.");
+                }
             }
 
             usleep(500000);

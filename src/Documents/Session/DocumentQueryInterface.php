@@ -188,8 +188,8 @@ interface DocumentQueryInterface
     function highlight(?string $fieldName, int $fragmentLength, int $fragmentCount, ?HighlightingOptions $options , Highlightings &$highlightings): DocumentQueryInterface;
     function include($includes): DocumentQueryInterface;
     function intersect(): DocumentQueryInterface;
-    function orderBy(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface;
-    function orderByDescending(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface;
+    function orderBy(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface;
+    function orderByDescending(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface;
     function proximity(int $proximity): DocumentQueryInterface;
     function randomOrdering(?string $seed = null): DocumentQueryInterface;
 }

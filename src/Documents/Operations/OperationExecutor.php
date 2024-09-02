@@ -56,7 +56,7 @@ class OperationExecutor
 
 
     /**
-     * 
+     *
      * Usage:
      *   - send(?OperationInterface $operation, ?SessionInfo $sessionInfo = null): ResultInterface;
      *   - send(string $entityClass, ?PatchOperation $operation, ?SessionInfo $sessionInfo = null): PatchOperationResult;
