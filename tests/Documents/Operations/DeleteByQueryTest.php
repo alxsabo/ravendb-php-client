@@ -2,6 +2,8 @@
 
 namespace tests\RavenDB\Documents\Operations;
 
+use RavenDB\Documents\Operations\GetOperationStateOperation;
+use RavenDB\Documents\Queries\QueryOperationOptions;
 use tests\RavenDB\RemoteTestBase;
 use RavenDB\Documents\Queries\IndexQuery;
 use tests\RavenDB\Infrastructure\Entity\User;
@@ -29,9 +31,13 @@ class DeleteByQueryTest extends RemoteTestBase
                 $session->close();
             }
 
+            $options = new QueryOperationOptions();
+            $options->setAllowStale(true);
+            $options->setRetrieveDetails(true);
+
             $indexQuery = new IndexQuery();
             $indexQuery->setQuery("from users where age == 5");
-            $operation = new DeleteByQueryOperation($indexQuery);
+            $operation = new DeleteByQueryOperation($indexQuery, $options);
             $asyncOp = $store->operations()->sendAsync($operation);
 
             $asyncOp->waitForCompletion();

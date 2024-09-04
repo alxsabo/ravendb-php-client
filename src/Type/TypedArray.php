@@ -39,12 +39,20 @@ class TypedArray extends ExtendedArrayObject implements TypedArrayInterface
             if ($value instanceof $type) {
                 $sa->offsetSet($key, $value);
             } else {
-                $obj = new ($sa->getType())($value);
+                $obj = self::_createNewItemObjectFromValue($value, $sa->getType());
                 $sa->offsetSet($key, $obj);
             }
         }
 
         return $sa;
+    }
+
+    public static function _createNewItemObjectFromValue(mixed $value, string $className): object
+    {
+        if (is_array($value) && method_exists($className, 'createNewItemObjectFromValue')) {
+            return $className::createNewItemObjectFromValue($value);
+        }
+        return new $className($value);
     }
 
     protected function isValueValid($value): bool

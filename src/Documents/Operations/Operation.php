@@ -73,8 +73,10 @@ class Operation
      *   - waitForCompletion(int $seconds);         // It will wait for given seconds
      *
      * @param Duration|int|null $duration
+     *
+     * @return mixed Returns operation result on Completed status
      */
-    public function waitForCompletion(Duration|int|null $duration = null): void
+    public function waitForCompletion(Duration|int|null $duration = null): mixed
     {
         $stopwatch = Stopwatch::createStarted();
 
@@ -89,7 +91,7 @@ class Operation
 
             switch ($operationStatus) {
                 case 'Completed':
-                    return;
+                    return $this->extractResult($status['Result']);
                 case 'Canceled':
                     throw new OperationCancelledException();
                 case 'Faulted':
@@ -108,7 +110,6 @@ class Operation
                     throw new $exception;
             }
 
-            echo 'checked time here';
             if ($duration) {
                 if ($stopwatch->elapsedInMillis() > $duration->toMillis()) {
                     throw new TimeoutException("Wait for completion time expired.");
@@ -118,4 +119,15 @@ class Operation
             usleep(500000);
         }
     }
+
+    protected function extractResult($data): ?BulkOperationResult
+    {
+        if (array_key_exists('$type', $data) &&  $data['$type'] != 'Raven.Client.Documents.Operations.BulkOperationResult, Raven.Client') {
+            return null;
+        }
+
+        $entityMapper = $this->conventions->getEntityMapper();
+        return $entityMapper->denormalize($data, BulkOperationResult::class);
+    }
+
 }

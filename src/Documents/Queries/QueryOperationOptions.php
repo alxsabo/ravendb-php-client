@@ -11,6 +11,7 @@ class QueryOperationOptions
     private bool $allowStale = false;
     private ?Duration $staleTimeout = null;
     private bool $retrieveDetails = false;
+    private bool $ignoreMaxStepsForScript = false;
 
     /**
      * Limits the amount of base operation per second allowed.
@@ -85,5 +86,24 @@ class QueryOperationOptions
     public function setRetrieveDetails(bool $retrieveDetails): void
     {
         $this->retrieveDetails = $retrieveDetails;
+    }
+
+    /**
+     * Ignore the maximum number of statements a script can execute as defined in the server configuration.
+     * @return bool
+     */
+    public function isIgnoreMaxStepsForScript(): bool
+    {
+        return $this->ignoreMaxStepsForScript;
+    }
+
+    /**
+     * Ignore the maximum number of statements a script can execute as defined in the server configuration.
+     *
+     * @param bool $ignoreMaxStepsForScript
+     */
+    public function setIgnoreMaxStepsForScript(bool $ignoreMaxStepsForScript): void
+    {
+        $this->ignoreMaxStepsForScript = $ignoreMaxStepsForScript;
     }
 }
