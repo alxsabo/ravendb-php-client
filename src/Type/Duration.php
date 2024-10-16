@@ -2,6 +2,7 @@
 
 namespace RavenDB\Type;
 
+use DateInterval;
 use Exception;
 use RavenDB\Utils\HashUtils;
 
@@ -152,5 +153,22 @@ class Duration
     {
         // @todo: implement this
         return -1;
+    }
+
+    public function toDateInterval(): DateInterval
+    {
+        // Convert milliseconds to total seconds and remaining microseconds
+        $seconds = floor($this->intervalInMilliSeconds / 1000);
+        $microseconds = ($this->intervalInMilliSeconds % 1000) * 1000;
+
+        // Create a DateInterval from the seconds
+        $interval = new DateInterval('PT' . $seconds . 'S');
+
+        // Add microseconds if needed
+        if ($microseconds > 0) {
+            $interval->f = $microseconds / 1e6; // Set the fraction of a second
+        }
+
+        return $interval;
     }
 }
