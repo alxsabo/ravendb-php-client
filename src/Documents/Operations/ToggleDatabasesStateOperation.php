@@ -12,7 +12,7 @@ class ToggleDatabasesStateOperation implements ServerOperationInterface
     private bool $disable = false;
     private ?ToggleDatabasesStateParameters $parameters = null;
 
-    public function __construct(?string $databaseName, bool $disable = false)
+    public function __construct(null|string|array $databaseName, bool $disable = false)
     {
         if ($databaseName == null) {
             throw new IllegalArgumentException("DatabaseName cannot be null");
@@ -20,7 +20,7 @@ class ToggleDatabasesStateOperation implements ServerOperationInterface
 
         $this->disable = $disable;
         $this->parameters = new ToggleDatabasesStateParameters();
-        $this->parameters->setDatabaseNames([ $databaseName ]);
+        $this->parameters->setDatabaseNames(is_array($databaseName) ? $databaseName : [ $databaseName ]);
     }
 
     public function getCommand(DocumentConventions $conventions): RavenCommand
