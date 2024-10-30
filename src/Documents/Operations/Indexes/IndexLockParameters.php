@@ -19,8 +19,11 @@ class IndexLockParameters
         return $this->indexNames;
     }
 
-    public function setIndexNames(?StringArray $indexNames): void
+    public function setIndexNames(null|StringArray|array $indexNames): void
     {
+        if (is_array($indexNames)) {
+            $indexNames = StringArray::fromArray($indexNames);
+        }
         $this->indexNames = $indexNames;
     }
 
