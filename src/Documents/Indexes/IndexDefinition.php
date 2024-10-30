@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class IndexDefinition extends IndexDefinitionBase implements ResultInterface
 {
-    public function __constructor()
+    public function __construct()
     {
         parent::__construct();
 
