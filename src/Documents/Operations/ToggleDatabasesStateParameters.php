@@ -14,7 +14,7 @@ class ToggleDatabasesStateParameters
     /**
      * @param StringArray|array $databaseNames
      */
-    public function __construct($databaseNames = [])
+    public function __construct(StringArray|array $databaseNames = [])
     {
         $this->setDatabaseNames($databaseNames);
     }
@@ -27,7 +27,7 @@ class ToggleDatabasesStateParameters
     /**
      * @param StringArray|array $databaseNames
      */
-    public function setDatabaseNames($databaseNames): void
+    public function setDatabaseNames(StringArray|array $databaseNames): void
     {
         if (is_array($databaseNames)) {
             $databaseNames = StringArray::fromArray($databaseNames);
