@@ -715,7 +715,7 @@ class DocumentQuery extends AbstractDocumentQuery
 
 
     /**
-     * @param Callable|FacetBase $builderOrFacets
+     * @param Callable|FacetBase|FacetBaseArray|array $builderOrFacets
      *
      * @return AggregationDocumentQueryInterface
      */
@@ -731,6 +731,10 @@ class DocumentQuery extends AbstractDocumentQuery
 
         if (is_array($builderOrFacets[0])) {
             return $this->aggregateByFacets(FacetBaseArray::fromArray($builderOrFacets[0]));
+        }
+
+        if (is_a($builderOrFacets[0], FacetBaseArray::class)) {
+            return $this->aggregateByFacets($builderOrFacets[0]);
         }
 
         return $this->aggregateByFacets(FacetBaseArray::fromArray($builderOrFacets));

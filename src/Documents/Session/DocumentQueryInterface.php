@@ -7,6 +7,7 @@ use RavenDB\Documents\Queries\Explanation\ExplanationOptions;
 use RavenDB\Documents\Queries\Explanation\Explanations;
 use RavenDB\Documents\Queries\Facets\AggregationDocumentQueryInterface;
 use RavenDB\Documents\Queries\Facets\FacetBase;
+use RavenDB\Documents\Queries\Facets\FacetBaseArray;
 use RavenDB\Documents\Queries\GroupBy;
 use RavenDB\Documents\Queries\Highlighting\HighlightingOptions;
 use RavenDB\Documents\Queries\Highlighting\Highlightings;
@@ -102,7 +103,7 @@ interface DocumentQueryInterface
     public function filter(Closure $builder, ?int $limit = null): DocumentQueryInterface;
 
     /**
-     * @param Callable|FacetBase $builderOrFacets
+     * @param Callable|FacetBase|FacetBaseArray|array $builderOrFacets
      *
      * @return AggregationDocumentQueryInterface
      */
