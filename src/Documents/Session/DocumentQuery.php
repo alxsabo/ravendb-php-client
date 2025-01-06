@@ -713,13 +713,7 @@ class DocumentQuery extends AbstractDocumentQuery
         return $query;
     }
 
-
-    /**
-     * @param Callable|FacetBase|FacetBaseArray|array $builderOrFacets
-     *
-     * @return AggregationDocumentQueryInterface
-     */
-    public function aggregateBy(...$builderOrFacets): AggregationDocumentQueryInterface
+    public function aggregateBy(Callable|FacetBase|FacetBaseArray|array ...$builderOrFacets): AggregationDocumentQueryInterface
     {
         if (count($builderOrFacets) == 0) {
             throw new IllegalArgumentException('You must provide argument.');

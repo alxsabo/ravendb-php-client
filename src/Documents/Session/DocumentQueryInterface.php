@@ -102,12 +102,7 @@ interface DocumentQueryInterface
      */
     public function filter(Closure $builder, ?int $limit = null): DocumentQueryInterface;
 
-    /**
-     * @param Callable|FacetBase|FacetBaseArray|array $builderOrFacets
-     *
-     * @return AggregationDocumentQueryInterface
-     */
-    public function aggregateBy(...$builderOrFacets): AggregationDocumentQueryInterface;
+    public function aggregateBy(Callable|FacetBase|FacetBaseArray|array ...$builderOrFacets): AggregationDocumentQueryInterface;
 
     public function aggregateUsing(?string $facetSetupDocumentId): AggregationDocumentQueryInterface;
 

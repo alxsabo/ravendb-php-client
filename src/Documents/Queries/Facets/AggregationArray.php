@@ -11,8 +11,12 @@ class AggregationArray extends TypedArray
         parent::__construct(FacetAggregationFieldSet::class);
     }
 
-    public function set(FacetAggregation $key, FacetAggregationFieldSet $value): void
+    public function set(FacetAggregation $key, FacetAggregationFieldSet|array $value): void
     {
+        if (is_array($value)) {
+            $value = FacetAggregationFieldSet::fromArray($value);
+        }
+
         parent::offsetSet($key->getValue(), $value);
     }
 
