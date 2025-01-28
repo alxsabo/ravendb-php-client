@@ -35,8 +35,11 @@ class AbstractJavaScriptIndexCreationTask extends AbstractIndexCreationTaskBase
         return $this->definition->getFields();
     }
 
-    public function setFields(?IndexFieldOptionsArray $fields): void
+    public function setFields(null|IndexFieldOptionsArray|array $fields): void
     {
+        if (is_array($fields)) {
+            $fields = IndexFieldOptionsArray::fromArray($fields);
+        }
         $this->definition->setFields($fields);
     }
 

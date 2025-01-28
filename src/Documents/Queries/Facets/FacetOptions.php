@@ -12,7 +12,7 @@ class FacetOptions
     private FacetTermSortMode $termSortMode;
 
     /** @SerializedName("IncludeRemainingTerms") */
-    private bool $includeRemainingTerms;
+    private bool $includeRemainingTerms = false;
 
     /** @SerializedName("Start") */
     private int $start = 0;

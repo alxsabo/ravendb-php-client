@@ -28,7 +28,7 @@ class HighlightingOptions
     /**
      * @param null|StringArray|array $preTags
      */
-    public function setPreTags($preTags): void
+    public function setPreTags(null|StringArray|array $preTags): void
     {
         $this->preTags = is_array($preTags) ? StringArray::fromArray($preTags) : $preTags;
     }
@@ -41,7 +41,7 @@ class HighlightingOptions
     /**
      * @param null|StringArray|array $postTags
      */
-    public function setPostTags($postTags): void
+    public function setPostTags(null|StringArray|array $postTags): void
     {
         $this->postTags = is_array($postTags) ? StringArray::fromArray($postTags) : $postTags;
     }

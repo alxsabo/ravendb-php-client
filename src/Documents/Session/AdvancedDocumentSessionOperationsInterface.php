@@ -116,9 +116,17 @@ interface AdvancedDocumentSessionOperationsInterface
     /**
      * Defer commands to be executed on saveChanges()
      *
-     * defer(CommandDataInterface $command): void
-     * defer(CommandDataInterface $command, array $commands): void
-     * defer(array $commands): void
+     * Usage:
+     *   - defer(CommandDataInterface $command): void
+     *   - defer(CommandDataInterface $command, array $commands): void
+     *   - defer(array $commands): void
+     *   - defer(CommandDataInterface ...$commands): void
+     *
+     * Example:
+     *   - defer($cmd);
+     *   - defer($cmd1, $cmd2, $cmd3, $cmd4 ...)
+     *   - defer([$cmd1, $cmd2, $cmd4, $cmd4, ...])
+     *   - defer($cmd1, [$cmd2, $cmd3])
      *
      * @param CommandDataInterface|array $commands More commands to defer
      */
@@ -205,12 +213,13 @@ interface AdvancedDocumentSessionOperationsInterface
      */
     function isLoaded(string $id): bool;
 
-//    /**
-//     * Mark the entity as one that should be ignore for change tracking purposes,
-//     * it still takes part in the session, but is ignored for SaveChanges.
-//     * @param entity Entity for which changed should be ignored
-//     */
-//    void ignoreChangesFor(Object entity);
+    /**
+     * Mark the entity as one that should be ignored for change tracking purposes,
+     * it still takes part in the session, but is ignored for SaveChanges.
+     *
+     * @param object $entity Entity for which changed should be ignored
+     */
+    function ignoreChangesFor(object $entity): void;
 
     /**
      * Returns all changes for each entity stored within session.

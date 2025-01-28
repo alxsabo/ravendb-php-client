@@ -9,6 +9,14 @@ class FacetAggregationField
     private ?string $name = null;
     private ?string $displayName = null;
 
+    public function __construct(
+        ?string $name = null,
+        ?string $displayName = null
+    ) {
+        $this->name = $name;
+        $this->displayName = $displayName;
+    }
+
     public function getName(): ?string
     {
         return $this->name;

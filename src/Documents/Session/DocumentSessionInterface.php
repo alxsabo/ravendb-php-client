@@ -5,7 +5,11 @@ namespace RavenDB\Documents\Session;
 // @todo: implement this interface
 use RavenDB\Documents\Queries\Query;
 use RavenDB\Documents\Session\Loaders\LoaderWithIncludeInterface;
+use RavenDB\Exceptions\Documents\Session\NonUniqueObjectException;
+use RavenDB\Exceptions\IllegalArgumentException;
+use RavenDB\Exceptions\IllegalStateException;
 use RavenDB\Type\ObjectArray;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 interface DocumentSessionInterface
 {
@@ -22,8 +26,16 @@ interface DocumentSessionInterface
     /**
      * Marks the specified entity for deletion. The entity will be deleted when IDocumentSession.saveChanges is called.
      *
-     * @param string|object|null $entity instance of entity to delete
-     * @param ?string $expectedChangeVector Expected change vector of a document to delete.
+     * Usage
+     *  - delete(?object $entity): void;
+     *  - delete(?string $id): void;
+     *  - delete(?string $id, ?string $expectedChangeVector): void;
+     *
+     * @param string|object|null $entity
+     * @param ?string $expectedChangeVector
+     *
+     * @throws IllegalArgumentException
+     * @throws IllegalStateException
      */
     public function delete(string|object|null $entity, ?string $expectedChangeVector = null): void;
 
@@ -33,9 +45,14 @@ interface DocumentSessionInterface
     public function saveChanges(): void;
 
     /**
-     * @param object|null $entity
-     * @param string|null $id
-     * @param string|null $changeVector
+     * Store entities inside the session object.
+     *
+     * Usage:
+     *  - public function store(?object $entity): void;
+     *  - public function store(?object $entity, ?string $id): void;
+     *  - public function store(?object $entity, ?string $id, ?string $changeVector): void;
+     *
+     * @throws IllegalStateException|NonUniqueObjectException|ExceptionInterface
      */
     public function store(?object $entity, ?string $id = null, ?string $changeVector = null): void;
 
@@ -53,23 +70,25 @@ interface DocumentSessionInterface
     /**
      * Loads the specified entity with the specified id.
      *
-     * load(string $className, string $id): ?object
-     * load(string $className, string $id, Closure $includes) ?Object;
+     * Usage
      *
-     * load(string $className, StringArray $ids): ObjectArray
-     * load(string $className, StringArray $ids, Closure $includes): ObjectArray;
+     *  - load(string $className, string $id): ?object
+     *  - load(string $className, string $id, Closure $includes) ?Object;
      *
-     * load(string $className, array $ids): ObjectArray
-     * load(string $className, array $ids, Closure $includes): ObjectArray;
+     *  - load(string $className, StringArray $ids): ObjectArray
+     *  - load(string $className, StringArray $ids, Closure $includes): ObjectArray;
      *
-     * load(string $className, string $id1, string $id2, string $id3 ... ): ObjectArray
+     *  - load(string $className, array $ids): ObjectArray
+     *  - load(string $className, array $ids, Closure $includes): ObjectArray;
+     *
+     *  - load(string $className, string $id1, string $id2, string $id3 ... ): ObjectArray
      *
      * @param ?string $className Object class
      * @param mixed $params Identifier of a entity that will be loaded.
      *
-     * @return null|object|ObjectArray Loaded entity or entities
+     * @return mixed null|object|ObjectArray Loaded entity or entities
      */
-    public function load(?string $className, ...$params);
+    public function load(?string $className, ...$params): mixed;
 
     /**
      * @param string $className
@@ -77,7 +96,7 @@ interface DocumentSessionInterface
      *
      * @return DocumentQueryInterface
      */
-    public function query(string $className, $collectionOrIndexName = null): DocumentQueryInterface;
+    public function query(string $className, Query|null|string $collectionOrIndexName = null): DocumentQueryInterface;
 
     /**
      * @param string $className

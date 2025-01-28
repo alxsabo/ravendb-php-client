@@ -68,6 +68,11 @@ interface DocumentQueryBaseSingleInterface
      * Register the query as a lazy query in the session and return a lazy
      * instance that will evaluate the query only when needed.
      * Also provide a function to execute when the value is evaluated
+     *
+     * Usage
+     *   - lazily();
+     *   - lazily(Closure $onEval)
+     *
      * @param ?Closure $onEval Action to be executed on evaluation.
      * @return Lazy query result
      */

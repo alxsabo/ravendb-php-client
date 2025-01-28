@@ -18,7 +18,7 @@ class OrderByToken extends QueryToken
      * @param bool $descending
      * @param string|OrderingType $sorterNameOrOrdering
      */
-    private function __construct(?string $fieldName, bool $descending, $sorterNameOrOrdering)
+    private function __construct(?string $fieldName, bool $descending, string|OrderingType $sorterNameOrOrdering)
     {
         $this->fieldName = $fieldName;
         $this->descending = $descending;
@@ -93,24 +93,12 @@ class OrderByToken extends QueryToken
         return new OrderByToken("random('" . str_replace("'", "''", $seed) . "')", false, OrderingType::string());
     }
 
-    /**
-     * @param string $fieldName
-     * @param string|OrderingType $sorterNameOrOrdering
-     *
-     * @return OrderByToken
-     */
-    public static function createAscending(string $fieldName, $sorterNameOrOrdering): OrderByToken
+    public static function createAscending(string $fieldName, string|OrderingType $sorterNameOrOrdering): OrderByToken
     {
         return new OrderByToken($fieldName, false, $sorterNameOrOrdering);
     }
 
-    /**
-     * @param string|null $fieldName
-     * @param string|OrderingType $sorterNameOrOrdering
-     *
-     * @return OrderByToken
-     */
-    public static function createDescending(?string $fieldName, $sorterNameOrOrdering): OrderByToken
+    public static function createDescending(?string $fieldName, string|OrderingType $sorterNameOrOrdering): OrderByToken
     {
         return new OrderByToken($fieldName, true, $sorterNameOrOrdering);
     }

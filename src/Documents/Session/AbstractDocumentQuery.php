@@ -422,12 +422,12 @@ abstract class AbstractDocumentQuery implements AbstractDocumentQueryInterface
 //    //TBD 4.1 public void _customSortUsing(String typeName, boolean descending)
 
 
-    protected function _projection(ProjectionBehavior $projectionBehavior): void
+    public function _projection(ProjectionBehavior $projectionBehavior): void
     {
         $this->projectionBehavior = $projectionBehavior;
     }
 
-    protected function addGroupByAlias(string $fieldName, string $projectedName = null): void
+    protected function addGroupByAlias(string $fieldName, ?string $projectedName = null): void
     {
         $this->aliasToGroupByFieldName[$projectedName] = $fieldName;
     }
@@ -1135,15 +1135,11 @@ abstract class AbstractDocumentQuery implements AbstractDocumentQueryInterface
      * @param string $field
      * @param OrderingType|string|null $sorterNameOrOrdering
      */
-    public function _orderBy(string $field, $sorterNameOrOrdering = null): void
+    public function _orderBy(string $field, OrderingType|string|null $sorterNameOrOrdering = null): void
     {
-        if ($sorterNameOrOrdering == null) {
-            $sorterNameOrOrdering = OrderingType::string();
-        }
-
         $this->assertNoRawQuery();
         $f = $this->ensureValidFieldName($field, false);
-        $this->orderByTokens->append(OrderByToken::createAscending($f, $sorterNameOrOrdering));
+        $this->orderByTokens->append(OrderByToken::createAscending($f, $sorterNameOrOrdering ?? OrderingType::string()));
     }
 
     /**
@@ -1153,7 +1149,7 @@ abstract class AbstractDocumentQuery implements AbstractDocumentQueryInterface
      * @param string $field Field to use
      * @param string|OrderingType|null $sorterNameOrOrdering Sorter to use
      */
-    public function _orderByDescending(string $field, $sorterNameOrOrdering = null): void
+    public function _orderByDescending(string $field, OrderingType|string|null $sorterNameOrOrdering = null): void
     {
         $this->assertNoRawQuery();
         $f = $this->ensureValidFieldName($field, false);

@@ -99,7 +99,7 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
      *
      * @return DocumentQueryBaseInterface
      */
-    function orderBy(string $field, $sorterNameOrOrdering = null): DocumentQueryBaseInterface;
+    function orderBy(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryBaseInterface;
 
     //TBD expr TSelf OrderBy<TValue>(params Expression<Func<T, TValue>>[] propertySelectors);
     //TBD expr TSelf OrderBy<TValue>(Expression<Func<T, TValue>> propertySelector, string sorterName);
@@ -112,7 +112,7 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
      *
      * @return DocumentQueryBaseInterface
      */
-    function orderByDescending(string $field, $sorterNameOrOrdering = null): DocumentQueryBaseInterface;
+    function orderByDescending(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryBaseInterface;
 
     //TBD expr TSelf OrderByDescending<TValue>(params Expression<Func<T, TValue>>[] propertySelectors);
     //TBD expr TSelf OrderByDescending<TValue>(Expression<Func<T, TValue>> propertySelector, string sorterName);
@@ -151,6 +151,13 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
 
     /**
      * Sorts the query results by distance.
+     *
+     * Usage
+     *   - orderByDistance(DynamicSpatialField $field, float $latitude, float $longitude);
+     *   - orderByDistance(DynamicSpatialField $field, ?string $shapeWkt);
+     *   - orderByDistance(?string $fieldName, float $latitude, float $longitude, float $roundFactor = 0);
+     *   - orderByDistance(?string $fieldName, ?string $shapeWkt);
+     *
      * @param DynamicSpatialField|string $field
      * @param float|string $latitudeOrShapeWkt
      * @param float|null $longitude
@@ -169,6 +176,13 @@ interface DocumentQueryBaseInterface extends QueryBaseInterface, FilterDocumentQ
 
     /**
      * Sorts the query results by distance.
+     *
+     * Usage
+     *   - orderByDistanceDescending(?DynamicSpatialField $field, float $latitude, float $longitude);
+     *   - orderByDistanceDescending(?DynamicSpatialField $field, ?string $shapeWkt);
+     *   - orderByDistanceDescending(?string $fieldName, float $latitude, float $longitude, float $roundFactor = 0);
+     *   - orderByDistanceDescending(?string $fieldName, ?string $shapeWkt);
+     *
      * @param DynamicSpatialField|string $field
      * @param float|string $latitudeOrShapeWkt
      * @param float|null $longitude

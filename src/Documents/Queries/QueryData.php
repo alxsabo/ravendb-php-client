@@ -97,8 +97,8 @@ class QueryData
      * @param bool $isCustomFunction
      */
     public function __construct(
-        $fields,
-        $projections,
+        StringArray|array  $fields,
+        StringArray|array  $projections,
         ?string            $fromAlias = null,
         ?DeclareTokenArray $declareTokens = null,
         ?LoadTokenList     $loadTokens = null,

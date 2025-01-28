@@ -9,14 +9,21 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class Facet extends FacetBase
 {
     /** @SerializedName("FieldName") */
-    private string $fieldName;
+    private ?string $fieldName = null;
 
-    public function getFieldName(): string
+    public function __construct(?string $fieldName = null)
+    {
+        parent::__construct();
+
+        $this->fieldName = $fieldName;
+    }
+
+    public function getFieldName(): ?string
     {
         return $this->fieldName;
     }
 
-    public function setFieldName(string $fieldName): void
+    public function setFieldName(?string $fieldName): void
     {
         $this->fieldName = $fieldName;
     }

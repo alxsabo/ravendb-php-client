@@ -43,15 +43,15 @@ interface LazySessionOperationsInterface
      */
     public function loadStartingWith(?string $className, ?string $idPrefix, ?string $matches = null, int $start = 0, int $pageSize = 25, ?string $exclude = null, ?string $startAfter = null): Lazy;
 
+    /**
+     * Loads the specified entity with the specified id and changeVector.
+     * If the entity is loaded into the session, the tracked entity will be returned otherwise the entity will be loaded only if it is fresher then the provided changeVector.
+     * @param string|null $className Result class
+     *
+     * @param string|null $id Identifier of a entity that will be conditional loaded.
+     * @param string|null $changeVector Change vector of a entity that will be conditional loaded.
+     * @return Lazy Entity and change vector
+     */
+    public function conditionalLoad(?string $className, ?string $id, ?string $changeVector): Lazy;
 
-//    /**
-//     * Loads the specified entity with the specified id and changeVector.
-//     * If the entity is loaded into the session, the tracked entity will be returned otherwise the entity will be loaded only if it is fresher then the provided changeVector.
-//     * @param clazz Result class
-//     * @param id Identifier of a entity that will be conditional loaded.
-//     * @param changeVector Change vector of a entity that will be conditional loaded.
-//     * @param <TResult> Result class
-//     * @return Lazy Entity and change vector
-//     */
-//    <TResult> Lazy<ConditionalLoadResult<TResult>> conditionalLoad(Class<TResult> clazz, String id, String changeVector);
 }

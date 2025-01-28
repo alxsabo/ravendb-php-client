@@ -15,18 +15,24 @@ class PutIndexesOperation implements MaintenanceOperationInterface
     private bool $allJavaScriptIndexes = false;
 
     /**
-     * @param IndexDefinition|IndexDefinitionArray ...$indexToAdd
+     * @param IndexDefinition|IndexDefinitionArray|array ...$indexToAdd
      */
     public function __construct(...$indexToAdd) {
         if (empty($indexToAdd)) {
             throw new IllegalArgumentException("indexToAdd cannot be null");
         }
 
+        if (is_array($indexToAdd[0])) {
+            $this->indexToAdd = IndexDefinitionArray::fromArray($indexToAdd[0]);
+            return;
+        }
+
         if ($indexToAdd[0] instanceof IndexDefinitionArray) {
             $this->indexToAdd = $indexToAdd[0];
-        } else {
-            $this->indexToAdd = IndexDefinitionArray::fromArray($indexToAdd);
+            return;
         }
+
+        $this->indexToAdd = IndexDefinitionArray::fromArray($indexToAdd);
     }
 
     public function getCommand(DocumentConventions $conventions): RavenCommand

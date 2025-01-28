@@ -391,25 +391,21 @@ class DocumentSession extends InMemoryDocumentSessionOperations implements
     /**
      * Loads the specified entity with the specified id.
      *
-     * load(string $className, string $id): ?object
-     * load(string $className, string $id, Closure $includes) ?Object;
-     *
-     * load(string $className, StringArray $ids): ObjectArray
-     * load(string $className, StringArray $ids, Closure $includes): ObjectArray;
-     *
-     * load(string $className, array $ids): ObjectArray
-     * load(string $className, array $ids, Closure $includes): ObjectArray;
-     *
-     * load(string $className, string $id1, string $id2, string $id3 ... ): ObjectArray
+     * Usage
+     *  - load(string $className, string $id): ?object
+     *  - load(string $className, string $id, Closure $includes) ?Object;
+     *  - load(string $className, StringArray $ids): ObjectArray
+     *  - load(string $className, StringArray $ids, Closure $includes): ObjectArray;
+     *  - load(string $className, array $ids): ObjectArray
+     *  - load(string $className, array $ids, Closure $includes): ObjectArray;
+     *  - load(string $className, string $id1, string $id2, string $id3 ... ): ObjectArray
      *
      * @param ?string $className Object class
      * @param mixed $params Identifier of an entity that will be loaded.
-     *
-     * @return null|object|ObjectArray Loaded entity or entities
-     *
+     * @return mixed null|object|ObjectArray - Loaded entity or entities
      * @throws ExceptionInterface
      */
-    public function load(?string $className, ...$params)
+    public function load(?string $className, ...$params): mixed
     {
         if (empty($params)) {
             throw new \http\Exception\InvalidArgumentException('Id or ids must be defined for loading.');
@@ -1111,7 +1107,7 @@ class DocumentSession extends InMemoryDocumentSessionOperations implements
      *
      * @return DocumentQueryInterface
      */
-    public function query(?string $className, $collectionOrIndexName = null): DocumentQueryInterface
+    public function query(?string $className, Query|null|string $collectionOrIndexName = null): DocumentQueryInterface
     {
         if (empty($collectionOrIndexName)) {
             return $this->_documentQuery($className, null, null, false);

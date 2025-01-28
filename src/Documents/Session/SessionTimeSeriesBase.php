@@ -132,7 +132,18 @@ class SessionTimeSeriesBase
         }
     }
 
-    public function increment(?DateTime $timestamp = null, array|float $values): void
+    /**
+     * Usage
+     *   - increment($timestamp, $value) - with single float value
+     *   - increment($timestamp, $values) - with array of float values
+     *
+     *   - increment(null, $value) - is the same as calling: increment(new DateTime(), $value)
+     *   - increment(null, $values) - is the same as calling: increment(new DateTime(), $values)
+     *
+     * @param DateTime|null $timestamp
+     * @param array|float $values
+     */
+    public function increment(?DateTime $timestamp, array|float $values): void
     {
         if ($timestamp == null) {
             $timestamp = new DateTime();

@@ -2,17 +2,27 @@
 
 namespace RavenDB\Type;
 
+use DateInterval;
 use Exception;
 use RavenDB\Utils\HashUtils;
 
 class Duration
 {
+    const MILLISECONDS_IN_YEAR = 365*24*60*60*1000;
+
     const MILLISECONDS_IN_DAY = 24*60*60*1000;
     const MILLISECONDS_IN_HOUR = 60*60*1000;
     const MILLISECONDS_IN_MINUTE = 60*1000;
     const MILLISECONDS_IN_SECOND = 1000;
 
     private int $intervalInMilliSeconds = 0;
+
+    public static function ofYears(int $years): Duration
+    {
+        $duration = new Duration();
+        $duration->intervalInMilliSeconds = $years * self::MILLISECONDS_IN_YEAR;
+        return $duration;
+    }
 
     public static function ofDays(int $days): Duration
     {
@@ -152,5 +162,22 @@ class Duration
     {
         // @todo: implement this
         return -1;
+    }
+
+    public function toDateInterval(): DateInterval
+    {
+        // Convert milliseconds to total seconds and remaining microseconds
+        $seconds = floor($this->intervalInMilliSeconds / 1000);
+        $microseconds = ($this->intervalInMilliSeconds % 1000) * 1000;
+
+        // Create a DateInterval from the seconds
+        $interval = new DateInterval('PT' . $seconds . 'S');
+
+        // Add microseconds if needed
+        if ($microseconds > 0) {
+            $interval->f = $microseconds / 1e6; // Set the fraction of a second
+        }
+
+        return $interval;
     }
 }

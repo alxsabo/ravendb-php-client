@@ -871,20 +871,25 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     /**
      * Marks the specified entity for deletion. The entity will be deleted when IDocumentSession.saveChanges is called.
      *
+     * Usage
+     *  - delete(?object $entity): void;
+     *  - delete(?string $id): void;
+     *  - delete(?string $id, ?string $expectedChangeVector): void;
+     *
      * @param string|object|null $entity
-     * @param string|null $changeVector
+     * @param string|null $expectedChangeVector
      *
      * @throws IllegalArgumentException
      * @throws IllegalStateException
      */
-    public function delete(string|object|null $entity, ?string $changeVector = null): void
+    public function delete(string|object|null $entity, ?string $expectedChangeVector = null): void
     {
         if (is_object($entity)) {
             $this->deleteEntity($entity);
             return;
         }
 
-        $this->deleteById($entity, $changeVector);
+        $this->deleteById($entity, $expectedChangeVector);
     }
 
     /**
@@ -966,9 +971,14 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     }
 
     /**
-     * @throws IllegalStateException
-     * @throws InvalidArgumentException
-     * @throws NonUniqueObjectException
+     * Store entities inside the session object.
+     *
+     * Usage:
+     *  - public function store(?object $entity): void;
+     *  - public function store(?object $entity, ?string $id): void;
+     *  - public function store(?object $entity, ?string $id, ?string $changeVector): void;
+     *
+     * @throws IllegalStateException|InvalidArgumentException|NonUniqueObjectException|ExceptionInterface
      */
     public function store(?object $entity, ?string $id = null, ?string $changeVector = null): void
     {
@@ -1509,6 +1519,40 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
         return $changes;
     }
 
+    /**
+     * Returns all changes for the specified entity. Including name of the field/property that changed, its old and new value and change type.
+     * @param object $entity
+     * @return DocumentsChangesArray list of changes
+     */
+    public function whatChangedFor(object $entity): DocumentsChangesArray
+    {
+        $documentInfo = $this->documentsByEntity->get($entity);
+        if ($documentInfo == null) {
+            return new DocumentsChangesArray();
+        }
+
+        if ($this->deletedEntities->contains($entity)) {
+            $change = new DocumentsChanges();
+            $change->setFieldNewValue("");
+            $change->setFieldOldValue("");
+            $change->setChange(ChangeType::documentDeleted());
+
+            return DocumentsChangesArray::fromArray([$change]);
+        }
+
+        $this->updateMetadataModifications($documentInfo->getMetadataInstance(), $documentInfo->getMetadata());
+        $document = $this->entityToJson->convertEntityToJson($documentInfo->getEntity(), $documentInfo);
+
+        $changes = [];
+
+        $changes = $this->getEntityChanges($document, $documentInfo);
+        if (empty($changes)) {
+            return new DocumentsChangesArray();
+        }
+
+        return $changes[$documentInfo->getId()];
+    }
+
     public function getTrackedEntities(): EntityInfoMap
     {
         $tracked = $this->documentsById->getTrackedEntities($this);
@@ -1642,15 +1686,17 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
         return $changes;
     }
 
-//    /**
-//     * Mark the entity as one that should be ignore for change tracking purposes,
-//     * it still takes part in the session, but is ignored for SaveChanges.
-//     *
-//     * @param entity entity
-//     */
-//    public void ignoreChangesFor(Object entity) {
-//        getDocumentInfo(entity).setIgnoreChanges(true);
-//    }
+    /**
+     * Mark the entity as one that should be ignored for change tracking purposes,
+     * it still takes part in the session, but is ignored for SaveChanges.
+     *
+     * @param object $entity Entity for which changed should be ignored
+     * @throws NonUniqueObjectException
+     */
+    public function ignoreChangesFor(object $entity): void
+    {
+        $this->getDocumentInfo($entity)->setIgnoreChanges(true);
+    }
 
     /**
      * Evicts the specified entity from the session.
@@ -1701,9 +1747,17 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
     /**
      * Defer commands to be executed on saveChanges()
      *
-     * defer(CommandDataInterface $command): void
-     * defer(CommandDataInterface $command, array $commands): void
-     * defer(array $commands): void
+     * Usage:
+     *   - defer(CommandDataInterface $command): void
+     *   - defer(CommandDataInterface $command, array $commands): void
+     *   - defer(array $commands): void
+     *   - defer(CommandDataInterface ...$commands): void
+     *
+     * Example:
+     *   - defer($cmd);
+     *   - defer($cmd1, $cmd2, $cmd3, $cmd4 ...)
+     *   - defer([$cmd1, $cmd2, $cmd4, $cmd4, ...])
+     *   - defer($cmd1, [$cmd2, $cmd3])
      *
      * @param CommandDataInterface|array $commands More commands to defer
      */
@@ -1713,26 +1767,18 @@ abstract class InMemoryDocumentSessionOperations implements CleanCloseable
             throw new InvalidArgumentException('You must call defer with command in parameter.');
         }
 
-        if (is_array($commands[0])) {
-            $this->deferCommands($commands[0]);
-            return;
-        }
-
-        if ($commands[0] instanceof CommandDataInterface) {
-            $this->deferCommand($commands[0]);
-            if (count($commands) == 1) {
-                return;
+        foreach ($commands as $command) {
+            if (is_array($command)) {
+                $this->deferCommands($command);
+                continue;
             }
-        }
-
-        if (count($commands) > 1) {
-            if (is_array($commands[1])) {
-                $this->deferCommands($commands[1]);
-                return;
+            if ($command instanceof CommandDataInterface) {
+                $this->deferCommand($command);
+                continue;
             }
-        }
 
-        throw new InvalidArgumentException('You called defer with invalid parameters');
+            throw new InvalidArgumentException('You called defer with invalid parameters');
+        }
     }
 
     /**

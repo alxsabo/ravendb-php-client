@@ -8,6 +8,7 @@ use RavenDB\Documents\Indexes\Spatial\SpatialRelation;
 use RavenDB\Documents\Indexes\Spatial\SpatialUnits;
 use RavenDB\Documents\Queries\SearchOperator;
 use RavenDB\Documents\Queries\Spatial\DynamicSpatialField;
+use RavenDB\Documents\Queries\Spatial\SpatialCriteriaFactory;
 use RavenDB\Type\Collection;
 
 interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
@@ -83,13 +84,20 @@ interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
      *
      * Space separated terms e.g. 'John Adam' means that we will look in selected field for 'John'
      * or 'Adam'.
+     *
+     * Usage:
+     *   - search("Name", "Oren Dejan Alex");
+     *   - search("Name", "Oren Dejan Alex", $searchOperator);
+     *   - search("Name", ["Oren", "Dejan", "Alex"]);
+     *   - search("Name", ["Oren", "Dejan", "Alex"], $searchOperator);
+     *
      * @param string $fieldName Field name
-     * @param string $searchTerms Search terms
+     * @param string|array $searchTerms Search terms
      * @param ?SearchOperator $operator Search operator
      *
      * @return FilterDocumentQueryBaseInterface
      */
-    public function search(string $fieldName, string $searchTerms, ?SearchOperator $operator = null): QueryBaseInterface;
+    public function search(string $fieldName, string|array $searchTerms, ?SearchOperator $operator = null): QueryBaseInterface;
 
     //TBD expr TSelf Search<TValue>(Expression<Func<T, TValue>> propertySelector, string searchTerms, SearchOperator @operator = SearchOperator.Or);
 
@@ -291,6 +299,11 @@ interface FilterDocumentQueryBaseInterface extends QueryBaseInterface
 
     /**
      * Ability to use one factory to determine spatial shape that will be used in query.
+     *
+     * Usage:
+     *   - spatial(string $fieldName, function(SpatialCriteriaFactory $x) {...})
+     *   - spatial(DynamicSpatialField $field, function(SpatialCriteriaFactory $x) {...})
+     *
      * @param string|DynamicSpatialField $field Spatial field
      * @param Closure $clause Spatial criteria factory
      * @return DocumentQueryInterface Query instance

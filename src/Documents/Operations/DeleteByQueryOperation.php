@@ -16,10 +16,17 @@ class DeleteByQueryOperation implements OperationInterface
     private ?QueryOperationOptions $options = null;
 
     /**
-     * @param null|string|IndexQuery $queryToDelete
+     * Usage:
+     *   - new DeleteByQueryOperation("from 'Orders'")
+     *   - new DeleteByQueryOperation("from 'Orders'", $options)
+     *
+     *   - new DeleteByQueryOperation(new IndexQuery("from 'Orders'"))
+     *   - new DeleteByQueryOperation(new IndexQuery("from 'Orders'"), $options)
+     *
+     * @param IndexQuery|string|null $queryToDelete
      * @param QueryOperationOptions|null $options
      */
-    public function __construct($queryToDelete, ?QueryOperationOptions $options = null)
+    public function __construct(IndexQuery|string|null $queryToDelete, ?QueryOperationOptions $options = null)
     {
         if ($queryToDelete == null) {
             throw new IllegalArgumentException('QueryToDelete cannot be null');

@@ -56,6 +56,12 @@ class OperationExecutor
 
 
     /**
+     *
+     * Usage:
+     *   - send(?OperationInterface $operation, ?SessionInfo $sessionInfo = null): ResultInterface;
+     *   - send(string $entityClass, ?PatchOperation $operation, ?SessionInfo $sessionInfo = null): PatchOperationResult;
+     *   - send(?PatchOperation $operation, ?SessionInfo $sessionInfo = null): PatchStatus;
+     *
      * @param mixed ...$parameters
      */
     public function send(...$parameters)
@@ -64,16 +70,16 @@ class OperationExecutor
             throw new IllegalArgumentException('Illegal arguments');
         }
 
-//        if ($parameters[0] instanceof PatchOperation) {
-//            $sessionInfo = null;
-//            if (count($parameters) > 1) {
-//                if (!$parameters[1] instanceof SessionInfo) {
-//                    throw new IllegalArgumentException('Illegal arguments');
-//                }
-//                $sessionInfo = $parameters[1];
-//            }
-//            return $this->sendPatchOperation($parameters[0], $sessionInfo);
-//        }
+        if ($parameters[0] instanceof PatchOperation) {
+            $sessionInfo = null;
+            if (count($parameters) > 1) {
+                if (!$parameters[1] instanceof SessionInfo) {
+                    throw new IllegalArgumentException('Illegal arguments');
+                }
+                $sessionInfo = $parameters[1];
+            }
+            return $this->sendPatchOperation($parameters[0], $sessionInfo);
+        }
 
         if ($parameters[0] instanceof OperationInterface) {
             $sessionInfo = null;

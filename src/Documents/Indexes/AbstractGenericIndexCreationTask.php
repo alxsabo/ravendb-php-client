@@ -60,6 +60,10 @@ abstract class AbstractGenericIndexCreationTask extends AbstractIndexCreationTas
 
     /**
      * Register a field to be spatially indexed
+     *
+     * Usage:
+     *   - spatial("shape", function ($x) {...})
+     *
      * @param string|null $field Field
      * @param Closure $indexing factory for spatial options
      */

@@ -30,13 +30,13 @@ class DeleteByIndexCommand extends RavenCommand
     public function createUrl(ServerNode $serverNode): string
     {
         $url = $serverNode->getUrl() . "/databases/" . $serverNode->getDatabase() . "/queries";
-        $url .= "?allowStale=" . ($this->options->isAllowStale() ?? "");
+        $url .= "?allowStale=" . ($this->options->isAllowStale() ? "true" : "");
 
         if ($this->options->getMaxOpsPerSecond() != null) {
             $url .= "&maxOpsPerSec=" . $this->options->getMaxOpsPerSecond();
         }
 
-        $url .= "&details=" . ($this->options->isRetrieveDetails() ?? "");
+        $url .= "&details=" . ($this->options->isRetrieveDetails() ? "true" : "");
 
         if ($this->options->getStaleTimeout() != null) {
             $url .= "&staleTimeout=" . TimeUtils::durationToTimeSpan($this->options->getStaleTimeout());

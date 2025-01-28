@@ -171,11 +171,11 @@ class DocumentQuery extends AbstractDocumentQuery
         return $this;
     }
 
-//    @Override
-//    public IDocumentQuery<T> orderByScoreDescending() {
-//        _orderByScoreDescending();
-//        return this;
-//    }
+    public function orderByScoreDescending(): DocumentQueryInterface
+    {
+        $this->_orderByScoreDescending();
+        return $this;
+    }
 
     public function includeExplanations(?ExplanationOptions $options, Explanations &$explanations): DocumentQueryInterface
     {
@@ -259,8 +259,12 @@ class DocumentQuery extends AbstractDocumentQuery
         return $this;
     }
 
-    public function search(string $fieldName, string $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface
+    public function search(string $fieldName, string|array $searchTerms, ?SearchOperator $operator = null): DocumentQueryInterface
     {
+        if (is_array($searchTerms)) {
+            $searchTerms = implode(" ", $searchTerms);
+        }
+
         $this->_search($fieldName, $searchTerms, $operator);
         return $this;
     }
@@ -566,12 +570,19 @@ class DocumentQuery extends AbstractDocumentQuery
      * The fields are the names of the fields to sort, defaulting to sorting by ascending.
      * You can prefix a field name with '-' to indicate sorting by descending or '+' to sort by ascending
      *
+     * Usage:
+     *   - orderBy("lastName"); // same as call: orderBy("lastName", OrderingType::string())
+     *   - orderBy("lastName", OrderingType::string());
+     *
+     *   - orderBy("units_in_stock", "MySorter");
+     *     // Results will be sorted by the 'units_in_stock' value according to the logic from 'MySorter' class
+     *
      * @param string $field
      * @param OrderingType|string|null $sorterNameOrOrdering
      *
      * @return DocumentQueryInterface
      */
-    function orderBy(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface
+    function orderBy(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface
     {
         $this->_orderBy($field, $sorterNameOrOrdering);
         return $this;
@@ -583,10 +594,18 @@ class DocumentQuery extends AbstractDocumentQuery
     /**
      * Order the results by the specified fields
      * The field is the name of the field to sort, defaulting to sorting by descending.
+     *
+     * Usage:
+     *   - orderByDescending("lastName"); // same as call: orderBy("lastName", OrderingType::string())
+     *   - orderByDescending("lastName", OrderingType::string());
+     *
+     *   - orderByDescending("units_in_stock", "MySorter");
+     *     // Results will be sorted by the 'units_in_stock' value according to the logic from 'MySorter' class
+     *
      * @param string $field Field to use in order by
      * @param string|OrderingType|null $sorterNameOrOrdering Sorter to use
      */
-    function orderByDescending(string $field, $sorterNameOrOrdering = null): DocumentQueryInterface
+    function orderByDescending(string $field, OrderingType|string|null $sorterNameOrOrdering = null): DocumentQueryInterface
     {
         $this->_orderByDescending($field, $sorterNameOrOrdering ?? OrderingType::string());
         return $this;
@@ -694,13 +713,7 @@ class DocumentQuery extends AbstractDocumentQuery
         return $query;
     }
 
-
-    /**
-     * @param Callable|FacetBase $builderOrFacets
-     *
-     * @return AggregationDocumentQueryInterface
-     */
-    public function aggregateBy(...$builderOrFacets): AggregationDocumentQueryInterface
+    public function aggregateBy(Callable|FacetBase|FacetBaseArray|array ...$builderOrFacets): AggregationDocumentQueryInterface
     {
         if (count($builderOrFacets) == 0) {
             throw new IllegalArgumentException('You must provide argument.');
@@ -712,6 +725,10 @@ class DocumentQuery extends AbstractDocumentQuery
 
         if (is_array($builderOrFacets[0])) {
             return $this->aggregateByFacets(FacetBaseArray::fromArray($builderOrFacets[0]));
+        }
+
+        if (is_a($builderOrFacets[0], FacetBaseArray::class)) {
+            return $this->aggregateByFacets($builderOrFacets[0]);
         }
 
         return $this->aggregateByFacets(FacetBaseArray::fromArray($builderOrFacets));

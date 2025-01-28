@@ -16,10 +16,19 @@ class RangeFacet extends FacetBase
      */
     private StringArray $ranges;
 
-    public function __construct(?FacetBase $parent = null)
+    public function __construct(?FacetBase $parent = null, StringArray|array|null $ranges = null)
     {
         $this->parent = $parent;
-        $ranges = new StringArray();
+
+        if ($ranges == null) {
+            $ranges = new StringArray();
+        }
+
+        if (is_array($ranges)) {
+            $ranges = StringArray::fromArray($ranges);
+        }
+
+        $this->ranges = $ranges;
     }
 
     public function getRanges(): StringArray
@@ -28,9 +37,9 @@ class RangeFacet extends FacetBase
     }
 
     /**
-     * @param StringArray|array $ranges
+     * @param array|StringArray $ranges
      */
-    public function setRanges($ranges): void
+    public function setRanges(array|StringArray $ranges): void
     {
         if (is_array($ranges)) {
             $ranges = StringArray::fromArray($ranges);
