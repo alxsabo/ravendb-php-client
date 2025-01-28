@@ -25,6 +25,8 @@ class RevisionsTest extends RemoteTestBase
 {
     public function testRevisions(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $this->setupRevisions($store, false, 4);
@@ -92,6 +94,7 @@ class RevisionsTest extends RemoteTestBase
     public function testCanListRevisionsBin(): void
     {
         TestRunGuard::disableTestForRaven52($this);
+        TestRunGuard::disableTestForRaven6AndLater($this);
 
         $store = $this->getDocumentStore();
         try {
@@ -129,6 +132,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsByChangeVectors(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $id = "users/1";
@@ -330,6 +335,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsByChangeVectorsLazily(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $id = "users/1";
@@ -387,6 +394,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetForLazily(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $id = "users/1";
@@ -457,6 +466,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsByIdAndTimeLazily(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $id = "users/1";
@@ -510,6 +521,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetMetadataForLazily(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $id = "users/1";
@@ -571,6 +584,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsByChangeVectorLazily(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
 
@@ -646,6 +661,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetAllRevisionsForDocument_UsingStoreOperation(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $company = new Company();
         $company->setName("Company Name");
         $store = $this->getDocumentStore();
@@ -684,6 +701,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsWithPaging_UsingStoreOperation(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $this->setupRevisions($store, false, 123);
@@ -749,6 +768,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsWithPaging2_UsingStoreOperation(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $store = $this->getDocumentStore();
         try {
             $this->setupRevisions($store, false, 100);
@@ -793,6 +814,8 @@ class RevisionsTest extends RemoteTestBase
 
     public function testCanGetRevisionsCountFor(): void
     {
+        TestRunGuard::disableTestIfLicenseNotAvailableForV6($this);
+
         $company = new Company();
         $company->setName("Company Name");
 
